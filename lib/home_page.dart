@@ -35,7 +35,10 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _addRecado(String texto) async {
     final encrypted = encrypter.encrypt(texto, iv: iv).base64;
-    await storage.write(key: DateTime.now().toIso8601String(), value: encrypted);
+    await storage.write(
+      key: DateTime.now().toIso8601String(),
+      value: encrypted,
+    );
     _loadRecados();
     recadoController.clear();
   }
@@ -43,7 +46,10 @@ class _HomePageState extends State<HomePage> {
   Future<void> _logout() async {
     await storage.deleteAll();
     await Supabase.instance.client.auth.signOut();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LoginPage()));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => LoginPage()),
+    );
   }
 
   Future<void> _clearRecados() async {
@@ -56,21 +62,29 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Cofrinho Secreto"),
-        actions: [
-          IconButton(icon: Icon(Icons.logout), onPressed: _logout),
-        ],
+        actions: [IconButton(icon: Icon(Icons.logout), onPressed: _logout)],
       ),
       body: Padding(
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            TextField(controller: recadoController, decoration: InputDecoration(labelText: "Digite um recado")),
-            ElevatedButton(onPressed: () => _addRecado(recadoController.text), child: Text("Salvar Recado")),
-            ElevatedButton(onPressed: _clearRecados, child: Text("Apagar Tudo")),
+            TextField(
+              controller: recadoController,
+              decoration: InputDecoration(labelText: "Digite um recado"),
+            ),
+            ElevatedButton(
+              onPressed: () => _addRecado(recadoController.text),
+              child: Text("Salvar Recado"),
+            ),
+            ElevatedButton(
+              onPressed: _clearRecados,
+              child: Text("Apagar Tudo"),
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: recados.length,
-                itemBuilder: (context, index) => ListTile(title: Text(recados[index])),
+                itemBuilder:
+                    (context, index) => ListTile(title: Text(recados[index])),
               ),
             ),
           ],
